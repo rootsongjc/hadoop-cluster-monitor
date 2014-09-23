@@ -117,8 +117,8 @@ class AlarmServer(object):
     def sendMail(self, mail):
         now = time.ctime()
         print mail.sender + '--' + mail.topic + '--' + mail.receiver + '--' + mail.server + '--' + mail.content + '--' + str(now)
-	result = os.popen('perl sendEmail -f ' + mail.sender + ' -t ' + mail.receiver + ' -s ' +  mail.server + ' -u ' + mail.topic + ' -m ' + mail.content + ' -xu ' + mail.name + ' -xp ' + mail.passwd).read()
-	print result
+	    result = os.popen('perl sendEmail -f ' + mail.sender + ' -t ' + mail.receiver + ' -s ' +  mail.server + ' -u ' + mail.topic + ' -m ' + mail.content + ' -xu ' + mail.name + ' -xp ' + mail.passwd + ' -o message-content-type=html -o message-charset=utf-8').read()
+	    print result
 
 
 handler = AlarmServer()
