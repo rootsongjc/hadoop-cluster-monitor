@@ -35,6 +35,7 @@ case $action in
   (restart)
     $0 stop
     $0 start
+	;;
   (*)
     echo $usage
     ;;
