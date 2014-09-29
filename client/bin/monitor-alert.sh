@@ -98,7 +98,6 @@ deadnode_excluded=$(getconf deadnode_excluded)
 time=$(date "+%Y-%m-%d %H:%M:%S")
 jmx=$1
 cluster=$2
-upflag=`grep -c "$cluster hadoop cluster is up" $logfile|cut -d ":" -f1|tail -n1`
 upLine=`grep -n "$cluster hadoop cluster is up" $logfile|cut -d ":" -f1|tail -n1`
 downLine=`grep -n "$cluster hadoop cluster is down" $logfile|cut -d ":" -f1|tail -n1`
 lastdead=`cat ../log/$cluster-deadnodes.out`  
@@ -159,7 +158,7 @@ elif [ "${status}" != '' ] && [ "${status}" != "DOWN" ] && [ "${status}" != "${l
 	fi
 
 #Hadoop cluster recovery.
-elif [ $upLine -lt $downLine ] || [ "${upflag}" == '0' ];then
+elif [ $upLine -lt $downLine ];then
     echo "$time [INFO] $cluster hadoop cluster is up." >> $logfile
 
     #send SMS
@@ -178,7 +177,7 @@ elif [ "${status}" == "" ] && [ "${lastdead}" != "" ];then
         echo "Beijing resent num reset to $Beijing_resent"
     elif [ "${cluster}" == "Guangzhou" ];then
         Guangzhou_resent=0
-        echo "GUangzhou resent num reset to $Guangzhou_resent"
+        echo "Guangzhou resent num reset to $Guangzhou_resent"
     fi
     echo "lastdead:$lastdead,nowdead:$status".
     num=`echo ${lasdead}|tr -s " " "\n"|wc -l`
@@ -189,7 +188,7 @@ elif [ "${status}" == "" ] && [ "${lastdead}" != "" ];then
     do
         deadhostname=`echo $lastdead | cut -d " " -f$i`
         deadip=`nslookup $deadhostname|tail -n2|head -n1|cut -d " " -f2`
-        echo "$time [INFO] $cluster $deadhostname:$deadip is dead!" >> $logfile
+        echo "$time [INFO] $cluster $deadhostname:$deadip is up." >> $logfile
         #send SMS
 		sendSMS "[INFO]" "$cluster $deadhostname:$deadip is up."
 
